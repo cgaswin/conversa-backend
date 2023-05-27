@@ -1,2 +1,5 @@
 const express = require("express")
-const Router = require("express").Router()
+const router = require("express").Router()
+const {signup} = require("../controllers/userController")
+
+router.route("/signup").post(signup)

@@ -1,5 +1,21 @@
-const User = require("../models/user")
-const BigPromise = require("../middlewares/bigPromise")
-const CustomError = require("../errors/customError")
+const User = require("../models/user");
+const BigPromise = require("../middlewares/bigPromise");
+const CustomError = require("../errors/customError");
+const cookieToken = require("../utils/cookieToken");
 
-module.exports
+exports.signup = BigPromise(async (req, res, next) => {
+  const { name, email, password } = req.body;
+
+  if (!email || !password || !name) {
+    return next(new CustomError("Name,Email and password are required",400))
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password
+  })
+
+  cookieToken(user,res)
+ 
+});
