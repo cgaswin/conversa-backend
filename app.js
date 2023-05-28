@@ -13,6 +13,10 @@ app.use(cookieParser());
 app.use(cors)
 app.use(morgan("tiny"))
 
+//import all routes
+const user = require("./routes/user")
 
+//router middleware
+app.use("/api/v1",user)
 
 module.exports = app
