@@ -9,3 +9,4 @@ router.route("/logout").get(logout)
 router.route("/password/update").put(isLoggedIn,changePassword)
 
 
+module.exports = router
