@@ -47,7 +47,7 @@ userSchema.methods.isValidatedPassword = async function (userSendPassword) {
 userSchema.methods.getJwtToken = async function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRY,
-  }).toString();
+  });
 };
 
 //generate forgot password token
@@ -55,13 +55,15 @@ userSchema.methods.getForgotPasswordToken = function () {
   //generate random string
   const forgotToken = crypto.randomBytes(20).toString("hex");
 
-  this.forgotPasswordToken = crypto.createHash('sha256').update(forgotToken).digest('hex')
+  this.forgotPasswordToken = crypto
+    .createHash("sha256")
+    .update(forgotToken)
+    .digest("hex");
 
   //time of token
-  this.forgotPasswordExpiry = Date.now()+20*60*1000
+  this.forgotPasswordExpiry = Date.now() + 20 * 60 * 1000;
 
-  return forgotToken
-
+  return forgotToken;
 };
 
 module.exports = mongoose.model("User", userSchema);

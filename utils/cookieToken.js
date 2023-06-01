@@ -1,9 +1,5 @@
 const cookieToken = async(user, res) => {
-  let token = await user.getJwtToken();
-
-  if (typeof token !== "string") {
-    token = token.toString();
-  }
+  const token = await user.getJwtToken();
 
   const options = {
     expires: new Date(
