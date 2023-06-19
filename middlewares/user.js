@@ -4,11 +4,9 @@ const CustomError = require("../errors/customError");
 const jwt = require("jsonwebtoken");
 
 exports.isLoggedIn = BigPromise(async (req, res, next) => {
-  let token = req.cookies.token;
 
-  if (!token && req.header("Authorization")) {
-    token = req.header("Authorization").replace("Bearer ", "");
-  }
+  token = req.header("Authorization").replace("Bearer ", "");
+  console.log(token)
 
   if (!token) {
     return next(new CustomError("Login first to access this page", 401));
