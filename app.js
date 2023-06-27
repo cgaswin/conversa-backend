@@ -17,8 +17,10 @@ app.use(morgan("tiny"))
 
 //import all routes
 const user = require("./routes/user")
+const chat = require("./routes/chat")
 
 //router middleware
 app.use("/api/v1",user)
+app.use("/api/v1",chat)
 
 module.exports = app

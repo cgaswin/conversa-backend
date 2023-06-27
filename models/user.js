@@ -19,14 +19,53 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "please provide password"],
-    select: false, // so that password does not come up when we access the user, we would have to explicitly mention that we need the password
+    select: false,
   },
-  forgotPasswordToken: String,
-  forgotPasswordExpiry: Date,
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
+  chats:[
+    {
+      theme: {
+        type: String,
+      },
+      chatId: {
+        type: String,
+      },
+      messages:[
+        {
+          message:{
+            type:String
+          },
+          user_role:{
+            type:String
+          },
+          Date:{
+            type:String,
+            default:new Date().toLocaleDateString()
+          },
+          time:{
+            type:String,
+            default:new Date().toLocaleTimeString()
+          },
+          reply:{
+              type:String
+          }, 
+          error:{
+              type:String
+          }
+        }
+      ]
+    }
+  ],
+  
+  forgotPasswordToken:String,
+  
+  forgotPasswordExpiry:{
+      type:Number
+   },
+
+   createdAt:{ 
+       type:Number 
+   }
+
 });
 
 //encrypt before save
