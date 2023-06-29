@@ -5,11 +5,13 @@ const mongoose = require("mongoose")
 
 
 exports.findChat = BigPromise(async (req,res,next)=>{
-    const { chatId } = req.params;
+    const { chatId } = req.query;
   const { userId } = req.query;
   console.log(chatId,userId)
     
     const user = await User.findById(userId)
+
+    console.log(user)
 
     if(!user){
         return next(new CustomError("user not found",400))
