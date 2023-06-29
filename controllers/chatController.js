@@ -4,25 +4,38 @@ const User = require("../models/user");
 const mongoose = require("mongoose")
 
 
+exports.findChat = BigPromise(async (req,res,next)=>{
+    const { chatId } = req.params;
+  const { userId } = req.query;
+  console.log(chatId,userId)
+    
+    const user = await User.findById(userId)
+
+    if(!user){
+        return next(new CustomError("user not found",400))
+    }
+
+    const chat = user.chats.find((item)=>item.chatId == chatId)
+
+    return res.status(200).json(chat);
+
+})
+
 exports.createChat = BigPromise(async (req,res,next)=>{
-    const {newMessage,chatId,userId} = req.body
-    const { text,user_role } = newMessage
+    const {text,chatId,userId} = req.body
     const theme = "dummyTheme"
     
 
     if(!chatId){
-        return next(new CustomError("chatId is mandatory"))
+        return next(new CustomError("chatId is mandatory",400))
     }
 
     
-    const user = await User.findOne({ _id: userId }).populate({
-        path: "chats",
-        model: "Chats",
-      });
+    const user = await User.findOne({ _id: userId }).populate("chats")
       
 
     if(!user){
-        return next(new CustomError("user not found"))
+        return next(new CustomError("user not found",400))
 
     }
 
@@ -33,16 +46,18 @@ exports.createChat = BigPromise(async (req,res,next)=>{
 
 
     const AddMessage = {
-        message:text,
-        user_role,
+        text,
         reply:"dummy",
         error:"dummy"
     }
+
+    console.log(text)
 
 
     if(chat){
 
         console.log(chat.messages)
+        console.log(AddMessage)
         chat.messages.push(AddMessage)
         await user.save()
         console.log("message added successfully")
@@ -66,7 +81,6 @@ exports.createChat = BigPromise(async (req,res,next)=>{
         res.status(200).json({
             success:true,
             message:"message added sucessfully",
-            newChat
         })
     }
 

@@ -4,6 +4,32 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
+
+
+const messageSchema = new mongoose.Schema({
+  text: {
+    type: String,
+  },
+  error:{
+    type:String,
+  },
+  time: {
+    type: String,
+    default: new Date().toLocaleTimeString(),
+  },
+  reply: {
+    type: String,
+  },
+});
+
+const chatSchema = new mongoose.Schema({
+  chatId: {
+    type: String,
+  },
+  messages: [messageSchema],
+});
+
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -21,41 +47,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "please provide password"],
     select: false,
   },
-  chats:[
-    {
-      theme: {
-        type: String,
-      },
-      chatId: {
-        type: String,
-      },
-      messages:[
-        {
-          message:{
-            type:String
-          },
-          user_role:{
-            type:String
-          },
-          Date:{
-            type:String,
-            default:new Date().toLocaleDateString()
-          },
-          time:{
-            type:String,
-            default:new Date().toLocaleTimeString()
-          },
-          reply:{
-              type:String
-          }, 
-          error:{
-              type:String
-          }
-        }
-      ]
-    }
-  ],
-  
+  chats:[chatSchema],
   forgotPasswordToken:String,
   
   forgotPasswordExpiry:{
