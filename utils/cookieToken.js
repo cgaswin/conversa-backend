@@ -15,7 +15,6 @@ const cookieToken = async(user, res) => {
 
   res.status(200).cookie("token", token, options).json({
     success: true,
-    token,
     user:userDetails,
   });
 };

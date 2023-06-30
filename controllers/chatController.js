@@ -41,31 +41,27 @@ exports.createChat = BigPromise(async (req,res,next)=>{
 
     }
 
-    console.log(user.chats)
-
     const chat = user.chats.find((item) => item.chatId === chatId);
     console.log(chat)
 
 
     const AddMessage = {
         text,
-        reply:"dummy",
+        reply:"hello aswin",
         error:"dummy"
     }
 
-    console.log(text)
 
 
     if(chat){
-
-        console.log(chat.messages)
         console.log(AddMessage)
         chat.messages.push(AddMessage)
         await user.save()
         console.log("message added successfully")
         res.status(200).json({
             success:true,
-            message:"message added sucessfully"
+            message:"message added sucessfully",
+            newMsg:user.chats[user.chats.length -1].messages.slice(-1)
         })
 
        
@@ -83,6 +79,7 @@ exports.createChat = BigPromise(async (req,res,next)=>{
         res.status(200).json({
             success:true,
             message:"message added sucessfully",
+            newMsg:user.chats[user.chats.length -1].messages.slice(-1)
         })
     }
 
