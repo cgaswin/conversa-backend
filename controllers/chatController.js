@@ -45,7 +45,6 @@ exports.createChat = BigPromise(async (req,res,next)=>{
     }
 
     const chat = user.chats.find((item) => item.chatId === chatId);
-    console.log(chat)
 
 
 
