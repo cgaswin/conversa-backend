@@ -2,6 +2,7 @@ const BigPromise = require("../middlewares/bigPromise");
 const CustomError = require("../errors/customError");
 const User = require("../models/user");
 const mongoose = require("mongoose")
+const openai = require("../config/openai")
 
 
 exports.findChat = BigPromise(async (req,res,next)=>{
@@ -24,6 +25,8 @@ exports.findChat = BigPromise(async (req,res,next)=>{
 })
 
 exports.createChat = BigPromise(async (req,res,next)=>{
+
+
     const {text,chatId,userId} = req.body
     const theme = "dummyTheme"
     
@@ -45,11 +48,34 @@ exports.createChat = BigPromise(async (req,res,next)=>{
     console.log(chat)
 
 
+
+    //open ai
+    const response = await openai.createChatCompletion({
+              model: "gpt-3.5-turbo",
+              messages: [
+                { role: "system", content: 'You are helping me learn English, and I would like your assistance. Whenever the user speaks, please respond in a human-like manner without mentioning that you are an AI. Additionally, I would like you to identify any errors in the user\'s sentence, such as grammatical errors, punctuation mistakes, or incorrect sentence formation. Please provide the reply and the corrected version of the user\'s sentence in JSON format, like this: { "reply": "bot reply", "error": "corrected version of the user\'s sentence" }. If no errors are found, please set the error field as No errors found. Please note that you should not provide any other reply than this.' }, // this represents the bot and what role they will assume
+                { role: "user", content: `user: ${text}` }, // the message that the user sends
+        
+              ],
+              max_tokens: 2048
+            });
+
+  console.log(response.data.choices[0].message.content)
+  const content = response.data.choices[0].message.content
+
+  // Parse the JSON content into an object
+const parsedContent = JSON.parse(content);
+
+// Extract the "reply" and "error" values
+const { reply, error } = parsedContent;
+
     const AddMessage = {
         text,
-        reply:"hello aswin",
-        error:"dummy"
+        reply,
+        error
     }
+
+    console.log(AddMessage)
 
 
 
